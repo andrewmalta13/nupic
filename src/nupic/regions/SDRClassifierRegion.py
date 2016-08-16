@@ -79,36 +79,36 @@ class SDRClassifierRegion(PyRegion):
           dataType='Real32',
           count=0,
           required=True,
-          regionLevel=True,
-          isDefaultInput=False,
-          requireSplitterMap=False),
+          isDefaultInput=False),
 
         bottomUpIn=dict(
           description='Belief values over children\'s groups',
           dataType='Real32',
           count=0,
           required=True,
-          regionLevel=False,
-          isDefaultInput=True,
-          requireSplitterMap=False),
+          isDefaultInput=True),
 
         predictedActiveCells=dict(
           description="The cells that are active and predicted",
           dataType='Real32',
           count=0,
           required=True,
-          regionLevel=True,
-          isDefaultInput=False,
-          requireSplitterMap=False),
+          isDefaultInput=False),
 
         sequenceIdIn=dict(
           description="Sequence ID",
           dataType='UInt64',
           count=1,
           required=False,
-          regionLevel=True,
+          isDefaultInput=False),
+
+        valueIn=dict(
+          description="Scalar value from record sensor",
+          dataType='Real32',
+          count=1,
+          required=False,
           isDefaultInput=False,
-          requireSplitterMap=False),
+        ),
       ),
 
       outputs=dict(
@@ -116,25 +116,19 @@ class SDRClassifierRegion(PyRegion):
           description='Classification results',
           dataType='Real32',
           count=0,
-          regionLevel=True,
-          isDefaultOutput=False,
-          requireSplitterMap=False),
+          isDefaultOutput=False),
 
         actualValues=dict(
           description='Classification results',
           dataType='Real32',
           count=0,
-          regionLevel=True,
-          isDefaultOutput=False,
-          requireSplitterMap=False),
+          isDefaultOutput=False),
 
         probabilities=dict(
           description='Classification results',
           dataType='Real32',
           count=0,
-          regionLevel=True,
-          isDefaultOutput=False,
-          requireSplitterMap=False),
+          isDefaultOutput=False,),
       ),
 
       parameters=dict(

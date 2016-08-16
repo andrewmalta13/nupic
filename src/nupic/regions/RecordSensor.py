@@ -113,19 +113,16 @@ class RecordSensor(PyRegion):
           description="Encoded data",
           dataType="Real32",  # inefficient for bits, but that's what we use now
           count=0,
-          regionLevel=True,
           isDefaultOutput=True),
         resetOut=dict(
           description="Reset signal",
           dataType="Real32",
           count=1,
-          regionLevel=True,
           isDefaultOutput=False),
         sequenceIdOut=dict(
           description="Sequence ID",
           dataType='UInt64',
           count=1,
-          regionLevel=True,
           isDefaultOutput=False),
         categoryOut=dict(
           description="Category",
@@ -137,21 +134,23 @@ class RecordSensor(PyRegion):
           description="Unencoded data from the source, input to the encoder",
           dataType="Real32",
           count=0,
-          regionLevel=True,
           isDefaultOutput=False),
         spatialTopDownOut=dict(
           description="""The top-down output signal, generated from
                         feedback from SP""",
           dataType='Real32',
           count=0,
-          regionLevel=True,
           isDefaultOutput=False),
         temporalTopDownOut=dict(
           description="""The top-down output signal, generated from
                         feedback from TP through SP""",
           dataType='Real32',
           count=0,
-          regionLevel=True,
+          isDefaultOutput=False),
+        predictedFieldOut=dict(
+          description="Value of the predicted field",
+          dataType='Real32',
+          count=1,
           isDefaultOutput=False),
       ),
       inputs=dict(
@@ -161,18 +160,14 @@ class RecordSensor(PyRegion):
           dataType='Real32',
           count=0,
           required=False,
-          regionLevel=True,
-          isDefaultInput=False,
-          requireSplitterMap=False),
+          isDefaultInput=False),
         temporalTopDownIn=dict(
           description="""The top-down input signal, generated from
                         feedback from TP through SP""",
           dataType='Real32',
           count=0,
           required=False,
-          regionLevel=True,
-          isDefaultInput=False,
-          requireSplitterMap=False),
+          isDefaultInput=False),
       ),
       parameters=dict(
         verbosity=dict(
@@ -195,6 +190,13 @@ class RecordSensor(PyRegion):
           dataType='UInt32',
           count=1,
           constraints='bool'),
+        predictionMode=dict(
+          description="1 if values are to be sent through predictedFieldOut",
+          accessMode='ReadWrite',
+          dataType='UInt32',
+          count=1,
+          constraints='bool'
+        ),
       ),
       commands=dict())
 
@@ -330,6 +332,8 @@ class RecordSensor(PyRegion):
         output[i] = cat
       output[len(categories):] = -1
 
+  # def enablePrediction(self, predictionArgs):
+
 
   def compute(self, inputs, outputs):
     """Get a record from the dataSource and encode it."""
@@ -368,7 +372,11 @@ class RecordSensor(PyRegion):
       # Populate the output numpy arrays; must assign by index.
       outputs['resetOut'][0] = reset
       outputs['sequenceIdOut'][0] = sequenceId
-      self.populateCategoriesOut(categories, outputs['categoryOut'])
+      
+      if self.predictionMode:
+        
+      else:
+        self.populateCategoriesOut(categories, outputs['categoryOut'])
 
       # ------------------------------------------------------------------------
       # Verbose print?
